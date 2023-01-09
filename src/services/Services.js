@@ -1,8 +1,9 @@
 import axios from "axios"
 
 export const PostCollection = (cardsList, token) => {
-    var url = "http://localhost:9090/cards"
+    var url = "https://cardalia-api.herokuapp.com/cards"
     const headers = { "Authorization": `bearer ${token}` }
+    console.log("PostCol: ", cardsList)
     axios.post(url, { "collection": cardsList }, { headers: headers })
         .catch(err => {
             console.log(err)
@@ -10,19 +11,19 @@ export const PostCollection = (cardsList, token) => {
 }
 
 export const GetCollection = (token) => {
-    var url = "http://localhost:9090/cards"
+    var url = "https://cardalia-api.herokuapp.com/cards"
     const headers = { "Authorization": `bearer ${token}` }
     return axios.get(url, { headers: headers }, { reponseType: 'json' })
 }
 
 
 export const GetUsersCollection = (username) => {
-    var url = "http://localhost:9090/user/" + username
+    var url = "https://cardalia-api.herokuapp.com/user/" + username
     return axios.get(url, { reponseType: 'json' })
 }
 
 export const GetData = (query, setData) => {
-    var url = "http://localhost:9090/" + query
+    var url = "https://cardalia-api.herokuapp.com/" + query
     axios.get(url, { reponseType: 'json' })
         .then(response => {
             setData(response.data)
@@ -34,48 +35,48 @@ export const GetData = (query, setData) => {
 }
 
 export const GetVersions = (name) => {
-    var url = "http://localhost:9090/cards/versions/" + name
+    var url = "https://cardalia-api.herokuapp.com/cards/versions/" + name
     return axios.get(url, { reponseType: 'json' })
 }
 
 export const PostRegister = (username, password) => {
-    var url = "http://localhost:9090/register"
+    var url = "https://cardalia-api.herokuapp.com/register"
     return axios.post(url, { "username": username, "password": password })
 }
 
 export const PostLogin = (username, password) => {
-    var url = "http://localhost:9090/login"
+    var url = "https://cardalia-api.herokuapp.com/login"
     return axios.post(url, { "username": username, "password": password })
 }
 
 export const GetUsersCollectionsWithCard = (oracle_id, token) => {
-    var url = "http://localhost:9090/users/" + oracle_id
+    var url = "https://cardalia-api.herokuapp.com/users/" + oracle_id
     const headers = { "Authorization": `bearer ${token}` }
     return axios.get(url, { headers: headers }, { reponseType: 'json' })
 }
 
 export const ModifyTrade = (trade, token) => {
     console.log("put trade:", trade)
-    var url = "http://localhost:9090/trade"
+    var url = "https://cardalia-api.herokuapp.com/trade"
     const headers = { "Authorization": `bearer ${token}` }
     return axios.put(url, { "username": trade.username, "whatYouTrade": trade.whatYouTrade, "whatHeTrade": trade.whatHeTrade, "youChecked": trade.youChecked, "heChecked": trade.heChecked }, { headers: headers })
 }
 
 export const PostNewTrade = (trade, token) => {
     console.log("Post trade:", trade)
-    var url = "http://localhost:9090/trade"
+    var url = "https://cardalia-api.herokuapp.com/trade"
     const headers = { "Authorization": `bearer ${token}` }
     return axios.post(url, { "username": trade.username, "whatYouTrade": trade.whatYouTrade, "whatHeTrade": trade.whatHeTrade, "youChecked": trade.youChecked, "heChecked": trade.heChecked }, { headers: headers })
 }
 
 export const GetTrades = (token) => {
-    var url = "http://localhost:9090/trades"
+    var url = "https://cardalia-api.herokuapp.com/trades"
     const headers = { "Authorization": `bearer ${token}` }
     return axios.get(url, { headers: headers }, { reponseType: 'json' })
 }
 
 export const DeleteTrade = (token, username) => {
-    var url = "http://localhost:9090/trade/" + username
+    var url = "https://cardalia-api.herokuapp.com/trade/" + username
     const headers = { "Authorization": `bearer ${token}` }
     return axios.delete(url, { headers: headers }, { reponseType: 'json' })
 }

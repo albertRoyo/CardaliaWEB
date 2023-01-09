@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "cardalia",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -15,10 +15,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.1.2",
     "react": "^18.2.0",
-    "react-alert": "^7.0.3",
-    "react-alert-template-basic": "^1.0.2",
     "react-dom": "^18.2.0",
-    "react-png-tooltip": "^1.2.0",
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
@@ -48,5 +45,17 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "Your Magic: The Gathering card trade website",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/albertRoyo/CardaliaWEB.git"
+  },
+  "author": "albert-royo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/albertRoyo/CardaliaWEB/issues"
+  },
+  "homepage": "https://github.com/albertRoyo/CardaliaWEB#readme"
 }

@@ -56,6 +56,27 @@ export function CollectionSelect({ cardsList, tradeCards, setTrade, finished }) 
         {
             field: 'name',
             headerName: "Card name",
+            renderCell: (params) => {
+                return (
+                    <button href="#" onClick={(e) => {
+                        const width = 260
+                        const height = 360
+                        const left = e.clientX - 30
+                        const top = e.clientY - 110
+                        window.open(params.row.img, '_blank', `resizable,height=${height},width=${width},top=${top},left=${left}`);
+                    }} rel="noreferrer"
+                        style={{
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            color: 'black',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            textDecoration: 'underline',
+                        }}>
+                        {params.row.name}
+                    </button>
+                )
+            },
             hideable: false,
             width: 150,
         },
@@ -108,7 +129,8 @@ export function CollectionSelect({ cardsList, tradeCards, setTrade, finished }) 
                     version: cardsList[i].set_name,
                     extras: cardsList[i].extras,
                     condi: cardsList[i].condi,
-                    select: findCardInTrades(cardsList[i])
+                    select: findCardInTrades(cardsList[i]),
+                    img: cardsList[i].image_uris.large
                 }
                 rows.push(row)
             }
@@ -121,7 +143,8 @@ export function CollectionSelect({ cardsList, tradeCards, setTrade, finished }) 
                     version: tradeCards[i].card.set_name,
                     extras: tradeCards[i].card.extras,
                     condi: tradeCards[i].card.condi,
-                    select: tradeCards[i].select
+                    select: tradeCards[i].select,
+                    img: tradeCards[i].card.image_uris.large
                 }
                 rows.push(row)
             }

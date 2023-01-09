@@ -123,15 +123,23 @@ export function CollectionCardList({ cardsList }) {
             hideable: false,
             renderCell: (params) => {
                 return (
-                    <a onClick={(e) => {
+                    <button href="#" onClick={(e) => {
                         const width = 260
                         const height = 360
                         const left = e.clientX - 30
                         const top = e.clientY - 110
                         window.open(params.row.img, '_blank', `resizable,height=${height},width=${width},top=${top},left=${left}`);
-                    }} rel="noreferrer">
+                    }} rel="noreferrer"
+                        style={{
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            color: 'black',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            textDecoration: 'underline',
+                        }}>
                         {params.row.name}
-                    </a>
+                    </button>
                 )
             },
             width: 250,

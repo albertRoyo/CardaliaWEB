@@ -79,6 +79,7 @@ export function Trade() {
                     console.log(err)
                 })
         }
+        // eslint-disable-next-line
     }, [token, trade.username])
 
     useEffect(() => {
