@@ -1,7 +1,6 @@
 import React, { useEffect } from "react"
 import { Routes, Route } from "react-router-dom"
 import { useSelector } from 'react-redux'
-import { useAlert } from 'react-alert'
 
 import useInitialize from '../hooks/Initialize'
 import { AppBarCustom } from "../components/AppBar"
@@ -35,12 +34,11 @@ export function Views() {
 
 function AppBarViews() {
     useInitialize()
-    const alert = useAlert()
     const userCollection = useSelector(state => state.cardsList.list)
 
     useEffect(() => {
         if (userCollection.length === 0) {
-            alert.info('Your collection is empty. Add cards before starting a trade')
+            //alert.info('Your collection is empty. Add cards before starting a trade')
         }
         // eslint-disable-next-line
     }, [])

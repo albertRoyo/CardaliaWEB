@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { useDispatch } from 'react-redux'
-import { useAlert } from 'react-alert'
 
 import { PostLogin } from '../services/Services'
 import { setUserName, setUserToken } from '../reducers/UserData.reducer'
@@ -21,7 +20,6 @@ export function Login() {
     const [password, setPassword] = useState('')
 
     const dispatch = useDispatch()
-    const alert = useAlert()
 
     const theme = createTheme()
 
@@ -30,11 +28,11 @@ export function Login() {
             .then((response) => {
                 dispatch(setUserToken(response.data.token))
                 dispatch(setUserName(username))
-                alert.success('Logged as ' + username)
+                //alert.success('Logged as ' + username)
             })
             .catch(err => {
                 console.log(err)
-                alert.error('Incorrect username or password')
+                //alert.error('Incorrect username or password')
                 return
             })
 

@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useAlert } from 'react-alert'
 
 import { PostRegister } from '../services/Services'
 
@@ -21,18 +20,17 @@ export function Register() {
     const [password, setPassword] = useState('')
 
     const navigate = useNavigate()
-    const alert = useAlert()
 
     const theme = createTheme()
 
     const handleRegister = () => {
         PostRegister(username, password)
             .then(() => {
-                alert.success('Registration successfull. Log in')
+                //alert.success('Registration successfull. Log in')
                 navigate("/")
             })
             .catch(err => {
-                alert.error('Username taken')
+                //alert.error('Username taken')
                 console.log(err)
                 return
             })
