@@ -20,7 +20,6 @@ export function Register() {
     const [password, setPassword] = useState('')
 
     const navigate = useNavigate()
-
     const theme = createTheme()
 
     const handleRegister = () => {
