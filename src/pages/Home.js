@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
+import Swal from 'sweetalert2'
 
 import { GetUsersCollectionsWithCard } from '../services/Services'
 
@@ -24,7 +25,14 @@ export function Home() {
         setIsCardSeted(true)
       })
       .catch(err => {
-        alert.error('A problem ocurred. Please, retry')
+        Swal.fire({
+          position: 'bottom-end',
+          icon: 'error',
+          title: 'A problem ocurred. Please, retry',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        //alert.error('A problem ocurred. Please, retry')
         console.log(err)
       })
   }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import clsx from 'clsx'
-import { useAlert } from 'react-alert'
+
 
 import { DataGrid } from '@mui/x-data-grid'
 import Box from '@mui/material/Box'
@@ -10,8 +10,6 @@ export function CollectionSelect({ cardsList, tradeCards, setTrade, finished }) 
     const [cards, setCards] = useState([])
 
     const tradesByCardId = new Map()
-
-    const alert = useAlert()
 
     for (const trade of tradeCards) {
         const card = trade.card
@@ -36,7 +34,6 @@ export function CollectionSelect({ cardsList, tradeCards, setTrade, finished }) 
         }
         const newTradeCards = Array.from(tradesByCardId.values())
         setTrade(newTradeCards)
-        alert.info('Untracked changes. Please, update trade')
     }
     function findCardInTrades(card) {
         for (const tradeCard of tradeCards) {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useAlert } from 'react-alert'
+import Swal from 'sweetalert2'
 
 import { PostCollection } from "../services/Services"
 import { addCard } from "../reducers/CardsList.reducer"
@@ -16,8 +16,7 @@ export function Collection() {
 
     const cardsList = useSelector(state => state.cardsList.list)
     const token = useSelector(state => state.userData.token)
-    const dispatch = useDispatch();
-    const alert = useAlert()
+    const dispatch = useDispatch()
 
     const [isModified, setIsModified] = useState(false)
 
@@ -29,11 +28,25 @@ export function Collection() {
     const handleSaveCollection = () => {
         PostCollection(cardsList, token)
             .then(() => {
-                alert.success('Collection updated succesfully')
+                Swal.fire({
+                    position: 'bottom-end',
+                    icon: 'success',
+                    title: 'Collection updated succesfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                //alert.success('Collection updated succesfully')
                 setIsModified(false)
             })
             .catch(err => {
-                alert.error('A problem ocurred. Please, retry')
+                Swal.fire({
+                    position: 'bottom-end',
+                    icon: 'error',
+                    title: 'A problem ocurred. Please, retry',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                //alert.error('A problem ocurred. Please, retry')
                 console.log(err)
             })
     }
@@ -45,14 +58,22 @@ export function Collection() {
                 Collection
             </Typography>
             <SearchBar cardSearchHandler={cardSearchHandler} setIsModified={setIsModified} />
-            <Stack direction="row" spacing={79}>
+            <Stack direction="row" spacing={12}>
                 <Typography variant="h6" gutterBottom>
                     Your Collection
                 </Typography>
                 {isModified ?
-                    <Button variant="contained" color="primary" onClick={handleSaveCollection} sx={{ width: '100' }}>
-                        Save collection
-                    </Button> : <></>
+                    <>
+                        <div></div><div></div><div></div>
+                        <Typography variant="body1" gutterBottom>
+                            <em>Save list rows before</em>
+                        </Typography>
+
+                        <Button variant="contained" color="primary" onClick={handleSaveCollection} sx={{ width: '100' }}>
+                            Save collection
+                        </Button>
+                    </> : <></>
+
                 }
             </Stack>
             <CollectionEdit

@@ -24,7 +24,7 @@ export const UserCollectionsList = ({ userCollections }) => {
                     <>
                         <br></br>
                         <Typography variant="body1" sx={{ marginLeft: "40px" }} gutterBottom>
-                            Not user found owning the searched card
+                            <em>Not user found owning the searched card</em>
                         </Typography>
                     </>
                 }

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react"
+import Swal from 'sweetalert2'
+
 
 import { GetData } from "../../services/Services"
 
@@ -21,11 +23,17 @@ export function SearchBar({ cardSearchHandler }) {
                         setData(response.data)
                     })
                     .catch(err => {
-                        alert.error('A problem ocurred. Please, retry')
+                        Swal.fire({
+                            position: 'bottom-end',
+                            icon: 'error',
+                            title: 'A problem ocurred. Please, retry',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
                         console.log(err)
                         return
                     })
-            }, 500)
+            }, 700)
             return () => clearTimeout(timer)
         }
         else {

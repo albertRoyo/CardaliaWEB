@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from "react-router-dom"
-import { useAlert } from 'react-alert'
+import Swal from 'sweetalert2'
+
 import { PostNewTrade, GetTrades } from "../services/Services"
 import { setTrades } from '../reducers/TradeData.reducer'
 
@@ -13,7 +14,6 @@ import Button from "@mui/material/Button"
 export function StartTrade() {
     const location = useLocation()
     const userCollection = location.state
-    const alert = useAlert()
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -32,7 +32,13 @@ export function StartTrade() {
             .then(() => {
                 GetTrades(token)
                     .then(response => {
-                        alert.success('Trade started succesfully')
+                        Swal.fire({
+                            position: 'bottom-end',
+                            icon: 'success',
+                            title: 'Trade started succesfully',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
                         dispatch(setTrades(response.data.trades))
                         navigate("/trades")
                     })
@@ -41,9 +47,18 @@ export function StartTrade() {
                     })
             })
             .catch(err => {
-                alert.error('A problem ocurred. Please, retry')
+                Swal.fire({
+                    position: 'bottom-end',
+                    icon: 'error',
+                    title: 'A problem ocurred. Please, retry',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
                 console.log(err)
             })
+    }
+    const handleCancel = () => {
+        navigate("/")
     }
 
     useEffect(() => {
@@ -62,6 +77,9 @@ export function StartTrade() {
                 <Typography variant="h4" gutterBottom>
                     Welcome to <em>{userCollection.username}</em> collection
                 </Typography>
+                <Button variant="outlined" color="primary" onClick={handleCancel} sx={{ width: '100' }}>
+                    Cancel
+                </Button>
                 {isModified ?
                     <Button variant="contained" color="primary" onClick={handleMakeTrade} sx={{ width: '100' }}>
                         Start Trade

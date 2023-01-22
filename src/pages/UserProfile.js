@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { useAlert } from 'react-alert'
+import Swal from 'sweetalert2'
 
 import { ChangeUserPassword } from '../services/Services'
 
@@ -10,7 +10,6 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 
 export function UserProfile() {
-    const alert = useAlert()
 
     const [isChangePassword, setIsChangePassword] = useState(false)
     const [oldPassword, setOldPassword] = useState('')
@@ -24,17 +23,35 @@ export function UserProfile() {
 
         // Validate the new password and confirm password
         if (newPassword !== confirmNewPassword) {
-            alert('The passwords do not match')
+            Swal.fire({
+                position: 'bottom-end',
+                icon: 'error',
+                title: 'The passwords do not match',
+                showConfirmButton: false,
+                timer: 1500
+            })
             return
         }
 
         // Update the user's password
         ChangeUserPassword(oldPassword, newPassword, token)
             .then(() => {
-                alert.success('Collection updated succesfully')
+                Swal.fire({
+                    position: 'bottom-end',
+                    icon: 'success',
+                    title: 'Password updated succesfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
             })
             .catch(err => {
-                alert.error('A problem ocurred. Please, retry')
+                Swal.fire({
+                    position: 'bottom-end',
+                    icon: 'error',
+                    title: 'A problem ocurred. Please, retry',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
                 console.log(err)
 
             })
@@ -57,10 +74,10 @@ export function UserProfile() {
                 Your profile
             </Typography>
             <br></br>
-            <br></br>
             <Typography variant="h6" gutterBottom>
                 Your email: <em>{email}</em>
             </Typography>
+            <br></br>
             {!isChangePassword ?
                 <Button variant="contained" color="primary" onClick={e => setIsChangePassword(true)} >
                     Change password
@@ -85,7 +102,6 @@ export function UserProfile() {
                             label="Old password"
                             name="oldPassword"
                             type="password"
-                            autoComplete="oldPassword"
                             autoFocus
                             value={oldPassword}
                             onChange={e => setOldPassword(e.target.value)}
@@ -97,7 +113,6 @@ export function UserProfile() {
                             label="New password"
                             name="newPassword"
                             type="password"
-                            autoComplete="newPassword"
                             value={newPassword}
                             onChange={e => setNewPassword(e.target.value)}
                         />
@@ -108,7 +123,6 @@ export function UserProfile() {
                             label="Confirm new password"
                             name="confirmNewPassword"
                             type="password"
-                            autoComplete="confirmNewPassword"
                             value={confirmNewPassword}
                             onChange={e => setConfirmNewPassword(e.target.value)}
                         />

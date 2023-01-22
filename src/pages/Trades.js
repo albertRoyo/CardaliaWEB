@@ -20,13 +20,13 @@ export function Trades() {
                 <>
                     <br></br>
                     <Typography variant="body1" sx={{ marginLeft: "40px" }} gutterBottom>
-                        No trades found.
+                        <em>No trades found.</em>
                     </Typography>
                 </> : <></>
             }
             <br></br>
             <Typography variant="body1" sx={{ marginLeft: "40px" }} gutterBottom>
-                Go to the <em>Home page</em> and search for a card name to start a new trade.
+                <em>Go to the Home page and search for a card name to start a new trade.</em>
             </Typography>
         </div>
     );

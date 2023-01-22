@@ -1,7 +1,6 @@
 import axios from "axios"
 
 const API_URL = "https://cardalia-api.herokuapp.com"
-//const API_URL = "http://localhost:9090"
 
 export const PostRegister = (username, email, password) => {
     var url = API_URL + "/register"

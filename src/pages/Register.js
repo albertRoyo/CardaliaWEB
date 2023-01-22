@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useAlert } from 'react-alert'
+import Swal from 'sweetalert2'
 
 import { PostRegister } from '../services/Services'
 
@@ -22,18 +22,30 @@ export function Register() {
     const [password, setPassword] = useState('')
 
     const navigate = useNavigate()
-    const alert = useAlert()
 
     const theme = createTheme()
 
     const handleRegister = () => {
         PostRegister(username, email, password)
             .then(() => {
-                alert.success('Registration successfull. Log in')
+                Swal.fire({
+                    position: 'bottom-end',
+                    icon: 'success',
+                    title: 'Registration successfull. Log in',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
                 navigate("/")
             })
             .catch(err => {
-                alert.error('Username taken!')
+                Swal.fire({
+                    position: 'bottom-end',
+                    icon: 'error',
+                    title: 'Username taken. Please, retry',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                //alert.error('Username taken!')
                 console.log(err)
                 return
             })

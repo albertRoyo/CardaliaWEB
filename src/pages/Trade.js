@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
-import { useAlert } from 'react-alert'
 import isEqual from 'lodash/isEqual'
+import Swal from 'sweetalert2'
 
 import { GetUsersCollection } from '../services/Services'
 import { ModifyTrade, GetTrades, DeleteTrade } from "../services/Services"
@@ -21,7 +21,6 @@ export function Trade() {
     const location = useLocation()
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const alert = useAlert()
 
     const token = useSelector(state => state.userData.token)
     const trade = location.state
@@ -52,16 +51,43 @@ export function Trade() {
                     .catch(err => {
                         console.log(err)
                     })
-                alert.success('Trade updated succesfully')
+                Swal.fire({
+                    position: 'bottom-end',
+                    icon: 'success',
+                    title: 'Trade updated succesfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
             })
             .catch(err => {
-                alert.error('A problem ocurred. Please, retry')
+                Swal.fire({
+                    position: 'bottom-end',
+                    icon: 'error',
+                    title: 'A problem ocurred. Please, retry',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
                 console.log(err)
             })
     }
 
     const handleFinishTrade = (event) => {
-        setYouChecked(event.target.checked)
+        const isChecked = event.target.checked
+        if (youChecked) {
+            setYouChecked(isChecked)
+        } else {
+            Swal.fire({
+                title: 'Are you sure you want to finish this trade?',
+                text: "Press this chechbox if you want to finish the trade. If the other person has this checkbox clicked, the trade will finish. ",
+                showDenyButton: true,
+                confirmButtonText: 'Yes',
+                denyButtonText: `No`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    setYouChecked(isChecked)
+                }
+            })
+        }
     }
 
     const handleCancelTrade = () => {
@@ -78,7 +104,13 @@ export function Trade() {
                 navigate("/trades")
             })
             .catch(err => {
-                alert.error('A problem ocurred. Please, retry')
+                Swal.fire({
+                    position: 'bottom-end',
+                    icon: 'error',
+                    title: 'A problem ocurred. Please, retry',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
                 console.log(err)
             })
     }
@@ -101,7 +133,14 @@ export function Trade() {
         trade.whatYouTrade = whatYouTrade
         trade.youChecked = youChecked
         if (!isEqual(trade, initialTrade)) {
-            alert.info('Untracked changes. Please, update trade')
+            Swal.fire({
+                position: 'bottom-end',
+                icon: 'info',
+                title: 'Untracked changes. Please, update trade',
+                showConfirmButton: false,
+                timer: 1500
+            })
+
         }
         // eslint-disable-next-line
     }, [whatHeTrade, whatYouTrade, youChecked])
@@ -122,14 +161,12 @@ export function Trade() {
                     <Typography variant="h4" gutterBottom>
                         Finished trade
                     </Typography>
-                    <Stack direction="row" spacing={113.5}>
-                        <Typography variant="body1" gutterBottom>
-                            Contact <em>{trade.username}</em> via email to meet and trade the cards selected.
-                        </Typography>
-                        <Typography variant="body1" gutterBottom>
-                            Email: <em>{trade.email}</em>
-                        </Typography>
-                    </Stack>
+                    <Typography variant="body1" gutterBottom>
+                        Contact <em>{trade.username}</em> via email to meet and trade the cards selected.
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                        Email: <em>{trade.email}</em>
+                    </Typography>
                 </>
             }
             <br></br>
@@ -137,7 +174,7 @@ export function Trade() {
                 <div>
                     <Stack direction="row" spacing={38}>
                         <Typography variant="h6" gutterBottom>
-                            What you trade
+                            What you give
                         </Typography>
                         {(!finished && (whatYouTrade.length !== 0 && whatHeTrade.length !== 0)) ?
                             <Tooltip title="Mark this trade as finished on your side">
@@ -161,7 +198,7 @@ export function Trade() {
                 <div>
                     <Stack direction="row" spacing={30}>
                         <Typography variant="h6" gutterBottom>
-                            What <em>{trade.username}</em> trades
+                            What <em>{trade.username}</em> give
                         </Typography>
                         {!finished ?
                             <FormControlLabel

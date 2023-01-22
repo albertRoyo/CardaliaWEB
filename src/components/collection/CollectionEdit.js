@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch } from 'react-redux'
-import { useAlert } from 'react-alert'
+import Swal from 'sweetalert2'
 
 import { GetVersions } from "../../services/Services"
 import { incCard, decCard, modVersionCard, modExtrasCard, modConditionCard } from '../../reducers/CardsList.reducer'
@@ -30,8 +30,6 @@ export function CollectionEdit({ cardsList, isModified, setIsModified }) {
     const [cardVersions, setCardVersions] = useState([])
 
     const dispatch = useDispatch()
-    const alert = useAlert()
-
 
     const handleIncCard = (id) => {
         dispatch(incCard(id))
@@ -52,13 +50,18 @@ export function CollectionEdit({ cardsList, isModified, setIsModified }) {
                 setIsModify(true)
             })
             .catch(err => {
-                alert.error('A problem ocurred. Please, retry')
+                Swal.fire({
+                    position: 'bottom-end',
+                    icon: 'error',
+                    title: 'A problem ocurred. Please, retry',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
                 console.log(err)
             })
         setModID(row.id)
         setModExtras(row.extras)
         setModCondition(row.condi)
-        alert.info('Save card row before saving collection')
     }
 
     const handleSaveCard = (row) => {
@@ -93,7 +96,7 @@ export function CollectionEdit({ cardsList, isModified, setIsModified }) {
         }
         setIsModify(false)
         if (isModified) {
-            alert.info('Untracked changes. Please, save collection')
+            //alert.info('Untracked changes. Please, save collection')
         }
     }
 

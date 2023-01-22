@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useDispatch } from 'react-redux'
-import { useAlert } from 'react-alert'
+import Swal from 'sweetalert2'
 
 import { PostLogin } from '../services/Services'
 import { setUserData } from '../reducers/UserData.reducer'
@@ -21,7 +21,6 @@ export function Login() {
     const [password, setPassword] = useState('')
 
     const dispatch = useDispatch()
-    const alert = useAlert()
 
     const theme = createTheme()
 
@@ -29,11 +28,30 @@ export function Login() {
         PostLogin(username, password)
             .then((response) => {
                 dispatch(setUserData({ username: username, email: response.data.email, token: response.data.token }))
-                alert.success('Logged  in as  ' + username)
+                Swal.fire({
+                    position: 'bottom-end',
+                    icon: 'success',
+                    title: 'Logged in as ' + username,
+                    showConfirmButton: false,
+                    timer: 1500,
+                    titleStyle: {
+                        fontSize: '18px',
+                        fontFamily: ''
+                    }
+                })
+                //alert.success()
             })
             .catch(err => {
                 console.log(err)
-                alert.error('Wrong username or password. Please, try again.')
+                Swal.fire({
+                    position: 'bottom-end',
+                    icon: 'error',
+                    title: 'Wrong username or password. Please, try again',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+
+                //alert.error('')
                 return
             })
 
