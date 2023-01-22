@@ -4,18 +4,23 @@ export const userData = createSlice({
   name: 'userData',
   initialState: {
     username: "",
+    email: "",
     token: "",
   },
   reducers: {
-    setUserName: (state, action) => {
-      state.username = action.payload
+    setUserData: (state, action) => {
+      state.username = action.payload.username
+      state.email = action.payload.email
+      state.token = action.payload.token
     },
-    setUserToken: (state, action) => {
-      state.token = action.payload
+    resetUserData: (state, action) => {
+      state.username = ""
+      state.email = ""
+      state.token = ""
     },
   },
 })
 
-export const { setUserName, setUserToken } = userData.actions
+export const { setUserData, resetUserData } = userData.actions
 
 export default userData.reducer

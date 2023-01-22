@@ -24,6 +24,7 @@ export function Home() {
         setIsCardSeted(true)
       })
       .catch(err => {
+        alert.error('A problem ocurred. Please, retry')
         console.log(err)
       })
   }
@@ -55,14 +56,11 @@ export function Home() {
             Welcome to CARDALIA
           </Typography>
           <Typography variant="h6" gutterBottom>
-            Get what you want for what you got!
+            Your Magic: The Gathering card trade website
           </Typography>
           <br></br>
           <Typography variant="body1" gutterBottom>
             Start by <strong>adding</strong> cards you have but don't need to <strong>your collection</strong>.
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            The more value the cards you add have, the easier it will be for you to get the cards you want.
           </Typography>
           <Typography variant="body1" gutterBottom>
             <strong>Search</strong> for a card and visit another user's collection to <strong>start the trade</strong>.

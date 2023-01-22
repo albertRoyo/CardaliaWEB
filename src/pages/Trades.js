@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 
 
 export function Trades() {
-    const trades = useSelector(state => state.tradeList.list)
+    const trades = useSelector(state => state.tradeData.list)
 
     return (
         <div>
@@ -16,6 +16,18 @@ export function Trades() {
                 Trades
             </Typography>
             <UserTradeList trades={trades} />
+            {trades.length === 0 ?
+                <>
+                    <br></br>
+                    <Typography variant="body1" sx={{ marginLeft: "40px" }} gutterBottom>
+                        No trades found.
+                    </Typography>
+                </> : <></>
+            }
+            <br></br>
+            <Typography variant="body1" sx={{ marginLeft: "40px" }} gutterBottom>
+                Go to the <em>Home page</em> and search for a card name to start a new trade.
+            </Typography>
         </div>
     );
 }

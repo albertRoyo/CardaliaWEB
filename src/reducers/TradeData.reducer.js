@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-export const tradeList = createSlice({
-    name: 'tradeList',
+export const tradeData = createSlice({
+    name: 'tradeData',
     initialState: {
         list: []
     },
@@ -13,7 +13,7 @@ export const tradeList = createSlice({
 })
 
 
-export const { setTrades } = tradeList.actions
+export const { setTrades } = tradeData.actions
 
 
-export default tradeList.reducer
+export default tradeData.reducer

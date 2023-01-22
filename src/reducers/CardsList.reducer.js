@@ -10,8 +10,9 @@ export const cardsList = createSlice({
       state.list = action.payload
     },
     addCard: (state, action) => {
-      const index = state.list.findIndex((card) => card.id === action.payload.id)
-      if ((index !== -1) && (state.list[index].extras === "Non Foil") && (state.list[index].condi === "Near Mint")) {
+      console.log("action: ", action.payload)
+      const index = state.list.findIndex((card) => (card.version_id === action.payload.id && card.extras === "Non Foil" && card.condi === "Near Mint"))
+      if (index !== -1) {
         ++state.list[index].count
       }
       else state.list.push({
@@ -45,6 +46,7 @@ export const cardsList = createSlice({
       state.list[index].set_name = action.payload.set_name
       state.list[index].set = action.payload.set
       state.list[index].collector_number = action.payload.collector_number
+      state.list[index].image_uris.large = action.payload.img
     },
     modExtrasCard: (state, action) => {
       const index = action.payload.id

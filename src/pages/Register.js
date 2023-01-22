@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useAlert } from 'react-alert'
 
 import { PostRegister } from '../services/Services'
 
@@ -17,19 +18,22 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 export function Register() {
     const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     const navigate = useNavigate()
+    const alert = useAlert()
+
     const theme = createTheme()
 
     const handleRegister = () => {
-        PostRegister(username, password)
+        PostRegister(username, email, password)
             .then(() => {
-                //alert.success('Registration successfull. Log in')
+                alert.success('Registration successfull. Log in')
                 navigate("/")
             })
             .catch(err => {
-                //alert.error('Username taken')
+                alert.error('Username taken!')
                 console.log(err)
                 return
             })
@@ -63,13 +67,24 @@ export function Register() {
                         <TextField
                             margin="normal"
                             fullWidth
-                            id="email"
+                            id="username"
                             label="Username"
                             name="username"
                             autoComplete="username"
                             autoFocus
                             value={username}
                             onChange={e => setUsername(e.target.value)}
+                        />
+                        <TextField
+                            margin="normal"
+                            fullWidth
+                            id="email"
+                            label="Email"
+                            name="email"
+                            autoComplete="email"
+                            autoFocus
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
                         />
                         <TextField
                             margin="normal"

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch } from 'react-redux'
+import { useAlert } from 'react-alert'
 
 import { GetVersions } from "../../services/Services"
 import { incCard, decCard, modVersionCard, modExtrasCard, modConditionCard } from '../../reducers/CardsList.reducer'
@@ -13,14 +14,15 @@ import MenuItem from "@mui/material/MenuItem"
 
 
 
-export function CollectionCardList({ cardsList }) {
+export function CollectionEdit({ cardsList, isModified, setIsModified }) {
     const [cards, setCards] = useState([])
 
-    const [isModify, setIsModify] = useState(false)
     const [modID, setModID] = useState("")
     const [modExtras, setModExtras] = useState("")
     const [modCondition, setModCondition] = useState("")
     const [modVersion, setModVersion] = useState("")
+
+    const [isModify, setIsModify] = useState(false)
     const [isModVersion, setIsModVersion] = useState(false)
     const [isModExtras, setIsModExtras] = useState(false)
     const [isModCondition, setIsModCondition] = useState(false)
@@ -28,31 +30,35 @@ export function CollectionCardList({ cardsList }) {
     const [cardVersions, setCardVersions] = useState([])
 
     const dispatch = useDispatch()
+    const alert = useAlert()
+
 
     const handleIncCard = (id) => {
         dispatch(incCard(id))
+        setIsModified(true)
     }
 
     const handleDecCard = (id) => {
         dispatch(decCard(id))
+        setIsModified(true)
     }
 
     const handleModCard = (row) => {
-        //setModVersion(row.version)
-
         GetVersions(row.name, setCardVersions, setIsModify)
             .then((response) => {
+                console.log("GET versions: ", response.data)
                 setCardVersions(response.data)
                 setModVersion(row.version)
                 setIsModify(true)
             })
             .catch(err => {
+                alert.error('A problem ocurred. Please, retry')
                 console.log(err)
-                return
             })
         setModID(row.id)
         setModExtras(row.extras)
         setModCondition(row.condi)
+        alert.info('Save card row before saving collection')
     }
 
     const handleSaveCard = (row) => {
@@ -63,6 +69,8 @@ export function CollectionCardList({ cardsList }) {
                 set_name: modVersion.set_name,
                 set: modVersion.set,
                 collector_number: modVersion.collector_number,
+                img: modVersion.image_uris.large,
+
             }
             dispatch(modVersionCard(cardVersion))
             setIsModVersion(false)
@@ -84,6 +92,9 @@ export function CollectionCardList({ cardsList }) {
             setIsModCondition(false)
         }
         setIsModify(false)
+        if (isModified) {
+            alert.info('Untracked changes. Please, save collection')
+        }
     }
 
     const handleChangeVersion = (event) => {
@@ -100,6 +111,12 @@ export function CollectionCardList({ cardsList }) {
         setModCondition(event.target.value)
         setIsModCondition(true)
     }
+
+    useEffect(() => {
+        if (isModVersion || isModExtras || isModCondition) {
+            setIsModified(true)
+        }
+    }, [isModVersion, isModExtras, isModCondition, setIsModified])
 
     const columns = [
         {

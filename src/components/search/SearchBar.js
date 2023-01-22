@@ -16,7 +16,15 @@ export function SearchBar({ cardSearchHandler }) {
     useEffect(() => {
         if (searchQuery.length > 2) {
             const timer = setTimeout(() => {
-                GetData(searchQuery, setData)
+                GetData(searchQuery)
+                    .then(response => {
+                        setData(response.data)
+                    })
+                    .catch(err => {
+                        alert.error('A problem ocurred. Please, retry')
+                        console.log(err)
+                        return
+                    })
             }, 500)
             return () => clearTimeout(timer)
         }

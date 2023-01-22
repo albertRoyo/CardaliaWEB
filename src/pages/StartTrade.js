@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from "react-router-dom"
-
+import { useAlert } from 'react-alert'
 import { PostNewTrade, GetTrades } from "../services/Services"
-import { setTrades } from '../reducers/TradeList.reducer'
+import { setTrades } from '../reducers/TradeData.reducer'
 
 import { CollectionSelect } from '../components/collection/CollectionSelect'
 import Typography from '@mui/material/Typography'
@@ -13,19 +13,26 @@ import Button from "@mui/material/Button"
 export function StartTrade() {
     const location = useLocation()
     const userCollection = location.state
+    const alert = useAlert()
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const token = useSelector(state => state.userData.token)
-    const trade = {}
     const [whatHeTrade, setWhatHeTrade] = useState([])
+    const trade = { username: userCollection.username, whatHeTrade: whatHeTrade }
+    const [isModified, setIsModified] = useState(false)
+
+    const isSelections = () => {
+        return whatHeTrade.length !== 0
+    }
 
     const handleMakeTrade = () => {
         console.log("trade: ", trade)
         PostNewTrade(trade, token)
-            .then(response => {
+            .then(() => {
                 GetTrades(token)
                     .then(response => {
+                        alert.success('Trade started succesfully')
                         dispatch(setTrades(response.data.trades))
                         navigate("/trades")
                     })
@@ -34,16 +41,18 @@ export function StartTrade() {
                     })
             })
             .catch(err => {
+                alert.error('A problem ocurred. Please, retry')
                 console.log(err)
             })
     }
 
     useEffect(() => {
         trade.whatHeTrade = whatHeTrade
-        trade.whatYouTrade = []
-        trade.username = userCollection.username
+        if (isSelections()) {
+            setIsModified(true)
+        }
         // eslint-disable-next-line
-    }, [whatHeTrade, userCollection.username])
+    }, [whatHeTrade])
 
 
     return (
@@ -53,12 +62,15 @@ export function StartTrade() {
                 <Typography variant="h4" gutterBottom>
                     Welcome to <em>{userCollection.username}</em> collection
                 </Typography>
-                <Button variant="contained" color="primary" onClick={handleMakeTrade} sx={{ width: '100' }}>
-                    Make Trade
-                </Button>
+                {isModified ?
+                    <Button variant="contained" color="primary" onClick={handleMakeTrade} sx={{ width: '100' }}>
+                        Start Trade
+                    </Button> : <></>
+                }
             </Stack>
+            <br></br>
             <Typography variant="h6" gutterBottom>
-                Select the cards you are interested in from <em>{userCollection.username}</em> collection to create a new trade
+                Select the cards you are interested in from <em>{userCollection.username}</em> collection by <strong>double-clicking</strong> the select cell.
             </Typography>
             <CollectionSelect
                 cardsList={userCollection.collection}

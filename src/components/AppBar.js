@@ -2,10 +2,7 @@ import * as React from 'react'
 import { useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
 
-import { setTrades } from '../reducers/TradeList.reducer'
-import { setUserName, setUserToken } from '../reducers/UserData.reducer'
-import { setCardsList } from '../reducers/CardsList.reducer'
-import { GetTrades, GetCollection } from '../services/Services'
+import { resetUserData } from '../reducers/UserData.reducer'
 
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -23,16 +20,11 @@ export function AppBarCustom() {
   //const [anchorElNav, setAnchorElNav] = React.useState(null)
 
   const username = useSelector(state => state.userData.username)
-  const token = useSelector(state => state.userData.token)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [anchorElUser, setAnchorElUser] = React.useState(null)
 
-  /*const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget)
-  }
-  */
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget)
   }
@@ -44,8 +36,7 @@ export function AppBarCustom() {
   const handleChoseMenu = (event, menuSetting) => {
     setAnchorElUser(null)
     if (menuSetting === 'Logout') {
-      dispatch(setUserName(""))
-      dispatch(setUserToken(""))
+      dispatch(resetUserData())
       navigate("/")
     }
     else navigate("/profile")
@@ -53,29 +44,11 @@ export function AppBarCustom() {
   }
 
   const handleCollection = () => {
-    GetCollection(token)
-      .then(response => {
-        dispatch(setCardsList(response.data.collection))
-        console.log("Get coll: ", response.data.collection)
-        navigate("/collection")
-
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    navigate("/collection")
   }
 
   const handleTrades = () => {
-    GetTrades(token)
-      .then(response => {
-        dispatch(setTrades(response.data.trades))
-        console.log("Get trade: ", response.data.trades)
-        navigate("/trades")
-
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    navigate("/trades")
   }
 
   const handleHome = () => {

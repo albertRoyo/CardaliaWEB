@@ -1,8 +1,9 @@
 import React, { useState } from "react"
 import { useDispatch } from 'react-redux'
+import { useAlert } from 'react-alert'
 
 import { PostLogin } from '../services/Services'
-import { setUserName, setUserToken } from '../reducers/UserData.reducer'
+import { setUserData } from '../reducers/UserData.reducer'
 
 import Avatar from '@mui/material/Avatar'
 import TextField from "@mui/material/TextField"
@@ -20,19 +21,19 @@ export function Login() {
     const [password, setPassword] = useState('')
 
     const dispatch = useDispatch()
+    const alert = useAlert()
 
     const theme = createTheme()
 
     const handleLogin = () => {
         PostLogin(username, password)
             .then((response) => {
-                dispatch(setUserToken(response.data.token))
-                dispatch(setUserName(username))
-                //alert.success('Logged as ' + username)
+                dispatch(setUserData({ username: username, email: response.data.email, token: response.data.token }))
+                alert.success('Logged  in as  ' + username)
             })
             .catch(err => {
                 console.log(err)
-                //alert.error('Incorrect username or password')
+                alert.error('Wrong username or password. Please, try again.')
                 return
             })
 

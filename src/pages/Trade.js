@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
+import { useAlert } from 'react-alert'
+import isEqual from 'lodash/isEqual'
 
 import { GetUsersCollection } from '../services/Services'
 import { ModifyTrade, GetTrades, DeleteTrade } from "../services/Services"
-import { setTrades } from '../reducers/TradeList.reducer'
+import { setTrades } from '../reducers/TradeData.reducer'
 
 import { CollectionSelect } from '../components/collection/CollectionSelect'
 import Typography from '@mui/material/Typography'
@@ -19,11 +21,17 @@ export function Trade() {
     const location = useLocation()
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const alert = useAlert()
+
     const token = useSelector(state => state.userData.token)
     const trade = location.state
+    const initialTrade = { ...trade } //useRef(trade);
+    //const [currentTrade, setCurrentTrade] = useState(trade)
+    //const initialTrade = { ...trade }
     const [whatHeTrade, setWhatHeTrade] = useState(trade.whatHeTrade)
     const [whatYouTrade, setWhatYouTrade] = useState(trade.whatYouTrade)
     const [traderCollection, setTraderCollection] = useState([])
+
     const finished = trade.heChecked & trade.youChecked
 
     const yourCollection = useSelector(state => state.cardsList.list)
@@ -33,16 +41,21 @@ export function Trade() {
 
     const handleUpdateTrade = () => {
         ModifyTrade(trade, token)
-            .then(response => {
+            .then(() => {
                 GetTrades(token)
                     .then(response => {
                         dispatch(setTrades(response.data.trades))
+                        if (youChecked & heChecked) {
+                            navigate("/trades")
+                        }
                     })
                     .catch(err => {
                         console.log(err)
                     })
+                alert.success('Trade updated succesfully')
             })
             .catch(err => {
+                alert.error('A problem ocurred. Please, retry')
                 console.log(err)
             })
     }
@@ -53,7 +66,7 @@ export function Trade() {
 
     const handleCancelTrade = () => {
         DeleteTrade(token, trade.username)
-            .then(response => {
+            .then(() => {
                 GetTrades(token)
                     .then(response => {
                         dispatch(setTrades(response.data.trades))
@@ -65,6 +78,7 @@ export function Trade() {
                 navigate("/trades")
             })
             .catch(err => {
+                alert.error('A problem ocurred. Please, retry')
                 console.log(err)
             })
     }
@@ -80,15 +94,17 @@ export function Trade() {
                 })
         }
         // eslint-disable-next-line
-    }, [token, trade.username])
+    }, [])
 
     useEffect(() => {
         trade.whatHeTrade = whatHeTrade
         trade.whatYouTrade = whatYouTrade
         trade.youChecked = youChecked
+        if (!isEqual(trade, initialTrade)) {
+            alert.info('Untracked changes. Please, update trade')
+        }
         // eslint-disable-next-line
     }, [whatHeTrade, whatYouTrade, youChecked])
-
 
     return (
         <div>
@@ -108,7 +124,10 @@ export function Trade() {
                     </Typography>
                     <Stack direction="row" spacing={113.5}>
                         <Typography variant="body1" gutterBottom>
-                            Contact <em>{trade.username}</em> to meet and trade the following cards:
+                            Contact <em>{trade.username}</em> via email to meet and trade the cards selected.
+                        </Typography>
+                        <Typography variant="body1" gutterBottom>
+                            Email: <em>{trade.email}</em>
                         </Typography>
                     </Stack>
                 </>
@@ -120,7 +139,7 @@ export function Trade() {
                         <Typography variant="h6" gutterBottom>
                             What you trade
                         </Typography>
-                        {!finished ?
+                        {(!finished && (whatYouTrade.length !== 0 && whatHeTrade.length !== 0)) ?
                             <Tooltip title="Mark this trade as finished on your side">
                                 <FormControlLabel
                                     control={

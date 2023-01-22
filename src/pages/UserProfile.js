@@ -1,23 +1,54 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { useAlert } from 'react-alert'
 
+import { ChangeUserPassword } from '../services/Services'
+
+import TextField from "@mui/material/TextField"
+import Button from "@mui/material/Button"
+import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 
 export function UserProfile() {
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
+    const alert = useAlert()
 
-    function handlePasswordChange(event) {
-        event.preventDefault()
+    const [isChangePassword, setIsChangePassword] = useState(false)
+    const [oldPassword, setOldPassword] = useState('')
+    const [newPassword, setNewPassword] = useState('')
+    const [confirmNewPassword, setConfirmNewPassword] = useState('')
+
+    const token = useSelector(state => state.userData.token)
+    const email = useSelector(state => state.userData.email)
+
+    const handlePasswordChange = () => {
 
         // Validate the new password and confirm password
-        if (password !== confirmPassword) {
+        if (newPassword !== confirmNewPassword) {
             alert('The passwords do not match')
-            return;
+            return
         }
 
         // Update the user's password
-        //updatePassword(password)
+        ChangeUserPassword(oldPassword, newPassword, token)
+            .then(() => {
+                alert.success('Collection updated succesfully')
+            })
+            .catch(err => {
+                alert.error('A problem ocurred. Please, retry')
+                console.log(err)
+
+            })
+
+        setIsChangePassword(false)
     }
+
+    useEffect(() => {
+        if (!isChangePassword) {
+            setOldPassword("")
+            setNewPassword("")
+            setConfirmNewPassword("")
+        }
+    }, [isChangePassword])
 
     return (
         <div>
@@ -28,27 +59,77 @@ export function UserProfile() {
             <br></br>
             <br></br>
             <Typography variant="h6" gutterBottom>
-                Reset your password:
+                Your email: <em>{email}</em>
             </Typography>
-            <form onSubmit={handlePasswordChange}>
-                <label htmlFor="password">New Password:</label>
-                <input
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                />
-                <br />
-                <label htmlFor="confirmPassword">Confirm Password:</label>
-                <input
-                    type="password"
-                    id="confirmPassword"
-                    value={confirmPassword}
-                    onChange={(event) => setConfirmPassword(event.target.value)}
-                />
-                <br />
-                <button type="submit">Change Password</button>
-            </form>
+            {!isChangePassword ?
+                <Button variant="contained" color="primary" onClick={e => setIsChangePassword(true)} >
+                    Change password
+                </Button> :
+                <>
+                    <Box component="form" noValidate
+                        sx={{
+                            marginTop: 2,
+                            marginLeft: 4,
+                            width: 220,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}>
+                        <Typography variant="h6" gutterBottom>
+                            Change your password
+                        </Typography>
+                        <TextField
+                            margin="normal"
+                            fullWidth
+                            id="oldPassword"
+                            label="Old password"
+                            name="oldPassword"
+                            type="password"
+                            autoComplete="oldPassword"
+                            autoFocus
+                            value={oldPassword}
+                            onChange={e => setOldPassword(e.target.value)}
+                        />
+                        <TextField
+                            margin="normal"
+                            fullWidth
+                            id="newPassword"
+                            label="New password"
+                            name="newPassword"
+                            type="password"
+                            autoComplete="newPassword"
+                            value={newPassword}
+                            onChange={e => setNewPassword(e.target.value)}
+                        />
+                        <TextField
+                            margin="normal"
+                            fullWidth
+                            id="confirmNewPassword"
+                            label="Confirm new password"
+                            name="confirmNewPassword"
+                            type="password"
+                            autoComplete="confirmNewPassword"
+                            value={confirmNewPassword}
+                            onChange={e => setConfirmNewPassword(e.target.value)}
+                        />
+                        <Box
+                            sx={{
+                                marginTop: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                            }}>
+                            <Button variant="contained" color="primary" onClick={handlePasswordChange} sx={{ width: '100%' }}>
+                                Change password
+                            </Button>
+                            <br></br>
+                            <Button variant="outlined" color="error" onClick={e => setIsChangePassword(false)} sx={{ width: '100%' }}>
+                                Cancel
+                            </Button>
+                        </Box>
+                    </Box>
+                </>
+            }
         </div>
     );
 }
