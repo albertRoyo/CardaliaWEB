@@ -50,7 +50,6 @@ export const ChangeUserPassword = (oldPassword, newPassword, token) => {
 export const PostCollection = (cardsList, token) => {
     var url = API_URL + "/user/collection"
     const headers = { "Authorization": `bearer ${token}` }
-    console.log("PostCol: ", cardsList)
     return axios.post(url, { "collection": cardsList }, { headers: headers })
 }
 
@@ -67,14 +66,12 @@ export const GetUsersCollectionsWithCard = (oracle_id, token) => {
 }
 
 export const PostNewTrade = (trade, token) => {
-    console.log("Post trade:", trade)
     var url = API_URL + "/user/trade"
     const headers = { "Authorization": `bearer ${token}` }
     return axios.post(url, { "username": trade.username, "whatYouTrade": trade.whatYouTrade, "whatHeTrade": trade.whatHeTrade, "youChecked": trade.youChecked, "heChecked": trade.heChecked }, { headers: headers })
 }
 
 export const ModifyTrade = (trade, token) => {
-    console.log("put trade:", trade)
     var url = API_URL + "/user/trade"
     const headers = { "Authorization": `bearer ${token}` }
     return axios.put(url, { "username": trade.username, "whatYouTrade": trade.whatYouTrade, "whatHeTrade": trade.whatHeTrade, "youChecked": trade.youChecked, "heChecked": trade.heChecked }, { headers: headers })

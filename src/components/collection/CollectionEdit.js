@@ -71,7 +71,6 @@ export function CollectionEdit({ cardsList, isModified, setIsModified }) {
     const handleModCard = (row) => {
         GetVersions(row.name, setCardVersions, setIsModify)
             .then((response) => {
-                console.log("GET versions: ", response.data)
                 setCardVersions(response.data)
                 setModVersion(row.version)
                 setIsModify(true)

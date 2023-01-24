@@ -53,7 +53,6 @@ export function StartTrade() {
     }
 
     const handleMakeTrade = () => {
-        console.log("trade: ", trade)
         PostNewTrade(trade, token)
             .then(() => {
                 GetTrades(token)

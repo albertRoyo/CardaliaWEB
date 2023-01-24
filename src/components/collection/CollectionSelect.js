@@ -39,7 +39,6 @@ export function CollectionSelect({ cardsList, tradeCards, setTrade, selection, f
     const [cards, setCards] = useState([])
 
     const tradesByCardId = new Map()
-    console.log("collection select: ", tradeCards)
     for (const trade of tradeCards) {
         const card = trade.card
         const cardId = `${card.id}-${card.extras}-${card.condi}`
@@ -47,7 +46,6 @@ export function CollectionSelect({ cardsList, tradeCards, setTrade, selection, f
     }
     const handleRowEditCommit = (cellData) => {
         const { id, value } = cellData
-        console.log(value)
         const card = cardsList[id]
         const cardId = `${card.id}-${card.extras}-${card.condi}`
         let trade = tradesByCardId.get(cardId)

@@ -29,7 +29,6 @@ export const cardsList = createSlice({
       state.list = action.payload
     },
     addCard: (state, action) => {
-      console.log("action: ", action.payload)
       const index = state.list.findIndex((card) => (card.version_id === action.payload.id && card.extras === "Non Foil" && card.condi === "Near Mint"))
       if (index !== -1) {
         ++state.list[index].count
