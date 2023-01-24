@@ -1,3 +1,27 @@
+/*
+Home view
+
+The Home function is a functional component that renders the homepage of the CARDALIA website. 
+It uses React hooks to manage the state of the component and also uses the useSelector hook from 
+the react-redux library to access the token from the global state. The component has two states, 
+cardSearch and isCardSeted that control the render of the component depending on whether a card has 
+been searched or not.
+
+The component has a cardSearchHandler function that is passed as a prop to the SearchBar component. 
+This function is called when a user selects a card from the search results. The function makes a request 
+to the server to get the collections of all users that own the selected card and sets the state userCollections
+with the received data. This function also sets the state isCardSeted to true so the component knows to
+render the list of users with the selected card.
+
+The component also has a handleResetCardSearch function that is used to reset the cardSearch and 
+isCardSeted states when the user wants to start a new search.
+
+The component's JSX renders the homepage with different elements depending on whether a card has been 
+searched or not. If a card has been searched, it renders a list of users that own the card, along with a 
+button to reset the search. If no card has been searched, it renders a welcome message and instructions for
+the user on how to use the website.
+*/
+
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
@@ -16,25 +40,37 @@ export function Home() {
   const [isCardSeted, setIsCardSeted] = useState(false)
   const [userCollections, setUserCollections] = useState([])
   const token = useSelector(state => state.userData.token)
+  const collection = useSelector(state => state.cardsList.list)
+
 
   const cardSearchHandler = (card) => {
-    setCardSearch(card)
-    GetUsersCollectionsWithCard(card.oracle_id, token)
-      .then(response => {
-        setUserCollections(response.data.user_collections)
-        setIsCardSeted(true)
+    if (collection.length === 0) {
+      Swal.fire({
+        position: 'bottom-end',
+        icon: 'info',
+        title: 'Please, add card to your collection before starting a trade.',
+        showConfirmButton: false,
+        timer: 1500
       })
-      .catch(err => {
-        Swal.fire({
-          position: 'bottom-end',
-          icon: 'error',
-          title: 'A problem ocurred. Please, retry',
-          showConfirmButton: false,
-          timer: 1500
+    }
+    else {
+      setCardSearch(card)
+      GetUsersCollectionsWithCard(card.oracle_id, token)
+        .then(response => {
+          setUserCollections(response.data.user_collections)
+          setIsCardSeted(true)
         })
-        //alert.error('A problem ocurred. Please, retry')
-        console.log(err)
-      })
+        .catch(err => {
+          Swal.fire({
+            position: 'bottom-end',
+            icon: 'error',
+            title: 'A problem ocurred. Please, retry',
+            showConfirmButton: false,
+            timer: 1500
+          })
+          console.log(err)
+        })
+    }
   }
 
   const handleResetCardSearch = () => {

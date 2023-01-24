@@ -1,3 +1,20 @@
+/*
+Register view
+
+This is a functional component called Register that is responsible for creating new user accounts. 
+The component uses the useState hook to keep track of the values of the username, email, and password 
+inputs. It also uses the useNavigate hook to navigate to different routes in the app.
+
+The handleRegister function is called when the user clicks the "Register" button. It makes a POST request 
+to the server with the username, email, and password inputs as the body of the request. If the registration 
+is successful, it shows an alert with a success message and navigates the user to the login page. 
+If the registration is unsuccessful, it shows an alert message with an error message.
+
+The component also includes a form that the user can fill out with their username, email, and password to create 
+a new account. There is also a "Register" button that when clicked, triggers the handleRegister function and 
+a link that navigates the user back to the login page.
+*/
+
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
@@ -45,7 +62,6 @@ export function Register() {
                     showConfirmButton: false,
                     timer: 1500
                 })
-                //alert.error('Username taken!')
                 console.log(err)
                 return
             })

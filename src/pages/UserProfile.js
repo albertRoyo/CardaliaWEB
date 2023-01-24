@@ -1,3 +1,26 @@
+/*
+User profile view
+
+This is a React functional component called UserProfile that allows the user to view and update 
+their profile information.
+
+It also uses the useSelector hook from the React-Redux library to get the current user's token and 
+email from the Redux store.
+
+It defines the handlePasswordChange function which is used to validate and update the user's password. 
+It first checks if the new password and confirm password match, if not it will show a alert message. 
+If they match it will call the ChangeUserPassword function, passing in the old password, new password,
+and token as arguments. If the password change is successful, it will show a success alert message, otherwise 
+it will show an alert error message and log the error.
+
+It also has an useEffect hook which will reset the old password, new password, and confirm new password 
+when the user is not trying to change the password.
+
+It returns a JSX element that displays the user's email, and a button to change the password. If the 
+user is trying to change their password, it will display form fields for the user to enter their old 
+and new password, as well as a button to submit the changes.
+*/
+
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'

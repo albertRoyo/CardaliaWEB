@@ -1,3 +1,30 @@
+/*
+Collection Edit
+
+This is a React functional component that allows the user to edit a collection of cards. 
+The component uses the hooks useState and useEffect and makes use of the useDispatch hook 
+from the react-redux library to dispatch actions to the store.
+
+The component starts by defining the state variables that will be used throughout the component, 
+including cards, modID, modExtras, modCondition, modVersion, isModify, isModVersion, isModExtras, 
+isModCondition, and cardVersions. It also receives two props cardsList and isModified and a function 
+setIsModified as input.
+
+The component defines several functions to handle the different actions that can be performed on the 
+collection, such as increasing or decreasing the number of copies of a card, modifying the card's version, 
+condition, or extras, and saving the modifications made to a card.
+
+The component also defines several event handlers that will be used to handle changes to the modVersion, 
+modExtras, and modCondition state variables.
+
+The useEffect hook is used to track changes to the state variables isModVersion, isModExtras, and 
+isModCondition and to update the isModified state variable accordingly.
+
+Finally, the component defines an array of columns, including the Copies, Name, Version, Extras, and 
+Condition columns, that will be used to render the collection of cards in a tabular format.
+*/
+
+
 import React, { useEffect, useState } from "react"
 import { useDispatch } from 'react-redux'
 import Swal from 'sweetalert2'

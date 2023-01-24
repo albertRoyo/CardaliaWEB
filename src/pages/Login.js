@@ -1,3 +1,27 @@
+/*
+Login view
+
+This code defines the Login component, which is responsible for rendering the login page 
+and handling the login process.
+
+It starts by defining two state variables username and password, which will store the user's 
+input for their username and password, respectively. The state is managed using the useState hook.
+
+It also imports the useDispatch hook from the react-redux library, which allows it to dispatch 
+actions to the global store.
+
+The code then defines a handleLogin function which is called when the user clicks the "login" button. 
+This function makes a POST request to the server with the user's inputted username and password.
+If the login is successful, the function dispatches an action to the global store to set the user's 
+data (username, email, token). If the login is unsuccessful, the function displays an error message to the user.
+
+The component then renders a form which includes two text fields for the user to input their username 
+and password, and a login button. It also includes a link to the registration page.
+
+It wraps the whole component with ThemeProvider component which accepts a theme object and it's used to 
+change the theme of the app.
+*/
+
 import React, { useState } from "react"
 import { useDispatch } from 'react-redux'
 import Swal from 'sweetalert2'

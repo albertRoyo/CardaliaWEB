@@ -1,3 +1,22 @@
+/*
+Collection reducer
+This is a Redux slice of the Redux store called cardsList that is responsible for managing the state of the user's 
+collection of cards.
+
+The slice has an initial state of an empty list, and it contains several reducers that update the 
+state based on specific actions. The reducers are:
+
+- setCardsList: sets the list of cards to a new payload (an array of card objects)
+- addCard: adds a new card object to the list
+- incCard: increases the count of a card object in the list
+- decCard: decreases the count of a card object in the list, and removes the card if the count is zero
+- modVersionCard: modifies the version_id, set_name, set, collector_number and image_uris.large of a card object in the list
+- modExtrasCard: modifies the extras of a card object in the list
+- modConditionCard: modifies the condition of a card object in the list
+
+The slice also exports the actions for each of these reducers, which can be used to update the state in other parts of the application.
+*/
+
 import { createSlice } from '@reduxjs/toolkit'
 
 export const cardsList = createSlice({

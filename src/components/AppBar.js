@@ -1,3 +1,24 @@
+/*
+App Bar
+
+The code is an implementation of a custom AppBar component in React. It uses the Material-UI 
+AppBar component to create a top navigation bar. It has 3 main features, the Home button, the 
+Collection button and the Trades button. These buttons allow the user to navigate to the home 
+page, their collection page and their trades page, respectively. The user's username is also 
+displayed on the right side of the AppBar, and when clicked, it opens a menu with options for 
+the user's profile and logout.
+
+The component also uses the useSelector and useDispatch hooks from the react-redux library to 
+access the user's username from the global state and to dispatch the resetUserData action which 
+is used when the user logs out.
+
+The component also uses the useNavigate hook from the react-router library to navigate to different 
+pages in the application.
+
+The component uses the Material-UI's Toolbar and Container components to create a responsive 
+layout, and the Tooltip component to give the user a hint when hover over the buttons and username.
+*/
+
 import * as React from 'react'
 import { useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'

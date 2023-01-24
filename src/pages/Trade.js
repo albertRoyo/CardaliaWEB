@@ -1,12 +1,38 @@
+/*
+Tarde view
+
+This is a React functional component called Trade used to represent a trade beetween to users.
+
+It then uses the useSelector hook to get the user's token from the Redux store, and sets the trade 
+variable to the location state. It also sets the initialTrade variable to a copy of the trade variable.
+
+It then sets the whatHeTrade, whatYouTrade, and traderCollection variables to the corresponding 
+values from the trade variable, using the useState hook.
+
+It also sets the finished variable to the result of checking if both the "heChecked" and "youChecked" 
+properties of the trade object are true.
+
+It then sets the yourCollection variable to the current user's collection from the Redux store, and sets 
+the youChecked variable to the "youChecked" property of the trade variable.
+
+It defines several event handlers such as handleUpdateTrade, handleFinishTrade, and handleCancelTrade for 
+updating, finishing and cancelling the trade respectively.
+
+It also has two useEffect hooks. The first one is used to get the other trader's collection when the trade 
+is not finished yet. The second one is used for updating the trade if any of the values in the component change.
+*/
+
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
 import isEqual from 'lodash/isEqual'
 import Swal from 'sweetalert2'
 
-import { GetUsersCollection } from '../services/Services'
+import { GetCollection, GetUsersCollection } from '../services/Services'
 import { ModifyTrade, GetTrades, DeleteTrade } from "../services/Services"
 import { setTrades } from '../reducers/TradeData.reducer'
+import { setCardsList } from '../reducers/CardsList.reducer'
+
 
 import { CollectionSelect } from '../components/collection/CollectionSelect'
 import Typography from '@mui/material/Typography'
@@ -44,13 +70,20 @@ export function Trade() {
                 GetTrades(token)
                     .then(response => {
                         dispatch(setTrades(response.data.trades))
-                        if (youChecked & heChecked) {
-                            navigate("/trades")
-                        }
+                        GetCollection(token)
+                            .then(response => {
+                                dispatch(setCardsList(response.data.collection))
+
+                            })
+                            .catch(err => {
+                                console.log(err)
+                            })
+                        navigate("/trades")
                     })
                     .catch(err => {
                         console.log(err)
                     })
+
                 Swal.fire({
                     position: 'bottom-end',
                     icon: 'success',
@@ -172,9 +205,9 @@ export function Trade() {
             <br></br>
             <Stack direction="row" spacing={7}>
                 <div>
-                    <Stack direction="row" spacing={38}>
+                    <Stack direction="row" spacing={15}>
                         <Typography variant="h6" gutterBottom>
-                            What you give
+                            What you give <em> (only {trade.username} can edit)</em>
                         </Typography>
                         {(!finished && (whatYouTrade.length !== 0 && whatHeTrade.length !== 0)) ?
                             <Tooltip title="Mark this trade as finished on your side">
@@ -192,13 +225,14 @@ export function Trade() {
                         cardsList={yourCollection}
                         tradeCards={whatYouTrade}
                         setTrade={setWhatYouTrade}
+                        selection={false}
                         finished={finished}
                     />
                 </div>
                 <div>
                     <Stack direction="row" spacing={30}>
                         <Typography variant="h6" gutterBottom>
-                            What <em>{trade.username}</em> give
+                            What <em>{trade.username}</em> gives
                         </Typography>
                         {!finished ?
                             <FormControlLabel
@@ -215,6 +249,7 @@ export function Trade() {
                         cardsList={traderCollection}
                         tradeCards={whatHeTrade}
                         setTrade={setWhatHeTrade}
+                        selection={true}
                         finished={finished}
                     />
                 </div>

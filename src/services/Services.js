@@ -1,6 +1,17 @@
+/*
+Services
+
+This is a collection of functions that interact with the backend API of the application. The functions 
+use the axios library to make requests to the API and return, to the component that made the request, 
+a promise that resolves with the response from the API or rejects with an error.
+
+The requests that need authentification have a header containing the user token.
+
+*/
 import axios from "axios"
 
-const API_URL = "https://cardalia-api.herokuapp.com"
+const API_URL = "https://cardalia-api.herokuapp.com"  // Production
+//const API_URL = "http://localhost:9090"             // Development
 
 export const PostRegister = (username, email, password) => {
     var url = API_URL + "/register"

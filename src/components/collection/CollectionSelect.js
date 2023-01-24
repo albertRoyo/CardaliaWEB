@@ -1,3 +1,32 @@
+/*
+Collection Select
+
+This is a React functional component that allows the user to select a certain number of cards 
+from a list of cards for a trade. The component uses the hooks useState and useEffect and receives
+several props as input, including cardsList, tradeCards, setTrade, selection, and finished.
+
+The component starts by defining the state variable cards and initializing it as an empty array. 
+It then uses a for loop to iterate through the tradeCards prop and creates a new Map object called
+tradesByCardId. It maps the id, extras, and condi of each card to its corresponding trade, so it 
+can be easily accessed later on.
+
+The component defines a handleRowEditCommit function that will be called when a user selects a 
+certain number of cards for a trade. It takes in an object cellData as an input and uses it to update
+the tradesByCardId map and the tradeCards state.
+
+The component also defines a findCardInTrades function that will be used to check if a card is 
+already present in the tradeCards state and to get the selection.
+
+The component also defines an array of columns that will be used to render the list of cards in a 
+tabular format. The columns include the Copies, Card name, Version, Extras, Condition, and Select columns. 
+The Select column is only editable if finished is false and selection is true.
+
+The useEffect hook is used to update the cards state variable with the data from cardsList whenever 
+cardsList changes.
+
+Finally, the component uses the renderCell property to create a button on the Card name column that 
+opens a new window with the image of the card when clicked.
+*/
 import React, { useEffect, useState } from "react"
 import clsx from 'clsx'
 
@@ -6,22 +35,21 @@ import { DataGrid } from '@mui/x-data-grid'
 import Box from '@mui/material/Box'
 
 
-export function CollectionSelect({ cardsList, tradeCards, setTrade, finished }) {
+export function CollectionSelect({ cardsList, tradeCards, setTrade, selection, finished }) {
     const [cards, setCards] = useState([])
 
     const tradesByCardId = new Map()
-
+    console.log("collection select: ", tradeCards)
     for (const trade of tradeCards) {
         const card = trade.card
-        const cardId = `${card.version_id}-${card.extras}-${card.condi}`
+        const cardId = `${card.id}-${card.extras}-${card.condi}`
         tradesByCardId.set(cardId, trade)
     }
-
     const handleRowEditCommit = (cellData) => {
         const { id, value } = cellData
         console.log(value)
         const card = cardsList[id]
-        const cardId = `${card.version_id}-${card.extras}-${card.condi}`
+        const cardId = `${card.id}-${card.extras}-${card.condi}`
         let trade = tradesByCardId.get(cardId)
         if (trade) {
             trade.select = value;
@@ -37,7 +65,7 @@ export function CollectionSelect({ cardsList, tradeCards, setTrade, finished }) 
     }
     function findCardInTrades(card) {
         for (const tradeCard of tradeCards) {
-            if (tradeCard.card.version_id === card.version_id & tradeCard.card.extras === card.extras & tradeCard.card.condi === card.condi) {
+            if (tradeCard.card.id === card.version_id & tradeCard.card.extras === card.extras & tradeCard.card.condi === card.condi) {
                 return tradeCard.select
             }
         }
@@ -102,7 +130,7 @@ export function CollectionSelect({ cardsList, tradeCards, setTrade, finished }) 
             headerClassName: 'super-app-theme--header',
             headerAlign: 'center',
             hideable: false,
-            editable: !finished,
+            editable: (!finished && selection),
             cellClassName: (params) => {
                 return clsx('super-app', {
                     selected: params.value > 0,

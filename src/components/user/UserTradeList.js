@@ -1,3 +1,20 @@
+/*
+User Trade List
+
+This is a React functional component that renders a list of user trades based on the trades prop passed 
+to it. The component returns JSX element that uses the List and ListItem components from Material-UI to 
+create an unordered list of user trades.
+
+It starts by using the getSelectionNumber function to calculate the total number of cards selected by 
+the user and the other user in the trade and returns it as a string.
+
+It also uses the getStatus function to calculate the status of the trade, whether it's finished, waiting 
+on the user to confirm, waiting on the other user to confirm, or pending.
+
+It maps through the trades prop and creates a ListItem for each trade. Each ListItem contains a link to 
+the trade page and passes the trade data as state to the link.
+*/
+
 import React from 'react'
 import { Link } from "react-router-dom"
 
